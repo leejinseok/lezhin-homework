@@ -48,7 +48,6 @@ public class AuthService {
         return memberRepository.save(member);
     }
 
-
     @Transactional(readOnly = true)
     public LoginResponse login(final LoginRequest loginRequest) {
         String email = loginRequest.getUserEmail();
