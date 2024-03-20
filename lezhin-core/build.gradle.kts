@@ -10,3 +10,7 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
 }
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}

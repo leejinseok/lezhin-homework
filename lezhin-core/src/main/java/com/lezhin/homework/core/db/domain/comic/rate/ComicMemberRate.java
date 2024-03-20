@@ -27,22 +27,22 @@ public class ComicMemberRate {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "member_id",
-            foreignKey = @ForeignKey(name = "fk_comic_member_rate_1"),
-            nullable = false
-    )
-    private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
             name = "comic_id",
-            foreignKey = @ForeignKey(name = "fk_comic_member_rate_2"),
+            foreignKey = @ForeignKey(name = "fk_comic_member_rate_1"),
             nullable = false
     )
     private Comic comic;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "member_id",
+            foreignKey = @ForeignKey(name = "fk_comic_member_rate_2"),
+            nullable = false
+    )
+    private Member member;
+
     @Column(nullable = false)
-    private Boolean like;
+    private Boolean isLike;
 
     @Column
     private String comment;
