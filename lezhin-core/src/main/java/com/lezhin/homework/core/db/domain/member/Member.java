@@ -30,6 +30,9 @@ public class Member {
     @Column(nullable = false)
     private String userEmail;
 
+    @Column(nullable = false)
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column
     private Gender gender;
@@ -40,6 +43,22 @@ public class Member {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime registerDate;
+    private LocalDateTime registerDateTime;
+
+    public static Member create(
+            final String username,
+            final String userEmail,
+            final Gender gender,
+            final MemberType type,
+            final LocalDateTime registerDateTime
+    ) {
+        return Member.builder()
+                .userName(username)
+                .userEmail(userEmail)
+                .gender(gender)
+                .type(type)
+                .registerDateTime(registerDateTime)
+                .build();
+    }
 
 }

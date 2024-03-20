@@ -9,9 +9,10 @@ public class MemberFactory {
         return Member.builder()
                 .userEmail("lezhin@lezhin.com")
                 .userName("김레진")
+                .password("password")
                 .type(MemberType.NORMAL)
                 .gender(Gender.MALE)
-                .registerDate(LocalDateTime.now())
+                .registerDateTime(LocalDateTime.now())
                 .build();
     }
 }
