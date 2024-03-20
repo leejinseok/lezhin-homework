@@ -16,3 +16,16 @@ spring:
     hibernate:
       ddl-auto: create
     generate-ddl: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem://localhost/~/lezhin-test
+      driver-class-name: org.h2.Driver
+      username: sa
+      password:
