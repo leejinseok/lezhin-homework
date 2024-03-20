@@ -48,6 +48,7 @@ public class Member {
     public static Member create(
             final String username,
             final String userEmail,
+            final String password,
             final Gender gender,
             final MemberType type,
             final LocalDateTime registerDateTime
@@ -55,6 +56,7 @@ public class Member {
         return Member.builder()
                 .userName(username)
                 .userEmail(userEmail)
+                .password(password)
                 .gender(gender)
                 .type(type)
                 .registerDateTime(registerDateTime)

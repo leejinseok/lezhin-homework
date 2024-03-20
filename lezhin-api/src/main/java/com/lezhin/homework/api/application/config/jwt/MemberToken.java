@@ -13,11 +13,11 @@ import lombok.Setter;
 public class MemberToken {
 
     private Long id;
-    private String email;
+    private String userEmail;
 
     public MemberToken(Claims claims) {
         this.id = claims.get("id", Long.class);
-        this.email = claims.getSubject();
+        this.userEmail = claims.getSubject();
     }
 
 }

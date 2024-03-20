@@ -30,7 +30,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public MemberResponse signUp(final SignUpRequest signUpRequest) {
+    public Member signUp(final SignUpRequest signUpRequest) {
 
         String userName = signUpRequest.getUserName();
         String userEmail = signUpRequest.getUserEmail();
@@ -42,19 +42,10 @@ public class AuthService {
         String passwordEncoded = passwordEncoder.encode(password);
 
         Member member = Member.create(
-                userName, userEmail, gender, type, LocalDateTime.now()
+                userName, emailEncrypt, passwordEncoded, gender, type, LocalDateTime.now()
         );
 
-        memberRepository.save(member);
-
-        return MemberResponse.of(
-                member.getId(),
-                member.getUserName(),
-                userEmail,
-                member.getGender(),
-                member.getType(),
-                member.getRegisterDateTime()
-        );
+        return memberRepository.save(member);
     }
 
 

@@ -5,6 +5,7 @@ import com.lezhin.homework.api.presentation.auth.dto.LoginRequest;
 import com.lezhin.homework.api.presentation.auth.dto.LoginResponse;
 import com.lezhin.homework.api.presentation.auth.dto.SignUpRequest;
 import com.lezhin.homework.api.presentation.member.dto.MemberResponse;
+import com.lezhin.homework.core.db.domain.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,20 @@ public class AuthController {
     @Operation(description = "회원가입", summary = "회원가입")
     @PostMapping("/sign-up")
     public ResponseEntity<MemberResponse> signUp(@RequestBody final SignUpRequest signUpRequest) {
-        MemberResponse member = authService.signUp(signUpRequest);
+        Member member = authService.signUp(signUpRequest);
+
+        MemberResponse response = MemberResponse.of(
+                member.getId(),
+                member.getUserName(),
+                signUpRequest.getUserEmail(),
+                member.getGender(),
+                member.getType(),
+                member.getRegisterDateTime()
+        );
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(member);
+                .body(response);
     }
 
     @Operation(description = "로그인", summary = "로그인")
