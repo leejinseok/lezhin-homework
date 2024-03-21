@@ -1,6 +1,7 @@
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    implementation("mysql:mysql-connector-java:8.0.32")
     runtimeOnly("com.h2database:h2")
 
     // Querydsl 추가

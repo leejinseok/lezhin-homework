@@ -24,7 +24,7 @@ public class ComicMemberRateController {
     private final ComicMemberRateFacade comicMemberRateFacade;
 
     @PostMapping
-    public ResponseEntity<ComicMemberRateResponse> rate(
+    public ResponseEntity<ComicMemberRateResponse> rateComic(
             @RequestBody final ComicMemberRateRequest request,
             @AuthenticationPrincipal final MemberToken memberToken
     ) {

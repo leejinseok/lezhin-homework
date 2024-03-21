@@ -1,6 +1,6 @@
 package com.lezhin.homework.api.application.domain.comic;
 
-import com.lezhin.homework.api.application.lock.MysqlLockService;
+import com.lezhin.homework.api.application.lock.LockService;
 import com.lezhin.homework.api.presentation.comic.dto.ComicMemberRateRequest;
 import com.lezhin.homework.core.db.domain.comic.rate.ComicMemberRate;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +14,17 @@ public class ComicMemberRateFacade {
 
     private static final String LOCK_KEY_PREFIX = "LOCK:COMIC_RATE_AND_COUNT_LIKES_AND_DISLIKES:";
 
-    private final MysqlLockService mysqlLockService;
+    private final LockService lockService;
     private final ComicMemberRateService comicMemberRateService;
 
     public ComicMemberRate rateComicWithLock(final long memberId, final ComicMemberRateRequest request) {
         long comicId = request.getComicId();
         String lockKey = LOCK_KEY_PREFIX + comicId;
-        boolean lock = mysqlLockService.getLock(lockKey, 5);
+        boolean lock = lockService.getLock(lockKey, 5);
         if (lock) {
             ComicMemberRate comicMemberRate = comicMemberRateService.rateComic(memberId, request);
             comicMemberRateService.countComicLikeAndDislikeCount(comicId);
-            mysqlLockService.releaseLock(lockKey);
+            lockService.releaseLock(lockKey);
             return comicMemberRate;
         } else {
             throw new RuntimeException("ComicMemberRateFacade > rateComicWithLock : lock 획득 실패");

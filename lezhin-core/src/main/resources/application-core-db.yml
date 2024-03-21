@@ -5,7 +5,6 @@ spring:
       driver-class-name: org.h2.Driver
       username: sa
       password:
-
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
@@ -21,8 +20,24 @@ spring:
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: prod
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/lezhin?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
+---
+spring:
+  config:
+    activate:
+      on-profile: test
   datasource:
     hikari:
       jdbc-url: jdbc:h2:mem://localhost/~/lezhin-test
