@@ -5,6 +5,8 @@ import com.lezhin.homework.api.application.config.ApiSecurityConfig;
 import com.lezhin.homework.api.application.config.jwt.JwtConfig;
 import com.lezhin.homework.api.application.config.jwt.JwtProvider;
 import com.lezhin.homework.api.application.domain.comic.ComicCacheService;
+import com.lezhin.homework.api.application.domain.comic.ComicService;
+import com.lezhin.homework.api.application.domain.comic.ComicViewHistoryService;
 import com.lezhin.homework.api.application.util.AES256Util;
 import com.lezhin.homework.core.db.domain.author.Author;
 import com.lezhin.homework.core.db.domain.comic.Comic;
@@ -22,6 +24,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.lezhin.homework.api.application.domain.author.AuthorFactory.createSampleAuthor;
+import static com.lezhin.homework.api.application.domain.comic.ComicFactory.createSampleComic;
+import static com.lezhin.homework.api.application.domain.member.MemberFactory.createSampleMember;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,6 +51,12 @@ class ComicControllerTest {
 
     @MockBean
     private ComicCacheService comicCacheService;
+
+    @MockBean
+    private ComicService comicService;
+
+    @MockBean
+    private ComicViewHistoryService comicViewHistoryService;
 
     @DisplayName("좋아요 많은순으로 3개")
     @Test
@@ -122,6 +136,33 @@ class ComicControllerTest {
                 .andExpect(jsonPath("$.[0].author").exists())
                 .andExpect(jsonPath("$.[0].author.id").exists())
                 .andExpect(jsonPath("$.[0].author.nickname").exists());
+    }
+
+    @DisplayName("웹툰 조회")
+    @Test
+    void getComic() throws Exception {
+        Member sampleMember = createSampleMember();
+        String token = jwtProvider.createToken(sampleMember);
+
+        Author sampleAuthor = createSampleAuthor(1L);
+        Comic sampleComic = createSampleComic(1L, sampleAuthor, new BigDecimal(0));
+        when(comicService.findById(anyLong())).thenReturn(sampleComic);
+        doNothing().when(comicViewHistoryService).viewComic(any(), anyLong());
+
+        mockMvc.perform(
+                        get("/api/v1/comics/1")
+                                .header("Authorization", "Bearer " + token)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(sampleComic.getId()))
+                .andExpect(jsonPath("$.contentsName").value(sampleComic.getContentsName()))
+                .andExpect(jsonPath("$.author.id").value(sampleAuthor.getId()))
+                .andExpect(jsonPath("$.author.nickname").value(sampleAuthor.getNickname()))
+                .andExpect(jsonPath("$.coin").value(sampleComic.getCoin().toBigInteger()))
+                .andExpect(jsonPath("$.openDate").exists())
+                .andExpect(jsonPath("$.likes").value(sampleComic.getLikes()))
+                .andExpect(jsonPath("$.dislikes").value(sampleComic.getDislikes()));
     }
 
 }

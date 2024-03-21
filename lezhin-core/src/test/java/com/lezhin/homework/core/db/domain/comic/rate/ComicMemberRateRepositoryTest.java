@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 
-import static com.lezhin.homework.core.db.domain.author.AuthorFactory.createAuthor;
+import static com.lezhin.homework.core.db.domain.author.AuthorFactory.createSampleAuthor;
 import static com.lezhin.homework.core.db.domain.comic.ComicFactory.createSampleComic;
 import static com.lezhin.homework.core.db.domain.member.MemberFactory.createSampleMember;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +51,7 @@ class ComicMemberRateRepositoryTest {
         member = createSampleMember();
         memberRepository.save(member);
 
-        Author author = createAuthor();
+        Author author = createSampleAuthor();
         authorRepository.save(author);
 
         comic = createSampleComic(author, new BigDecimal(0));
