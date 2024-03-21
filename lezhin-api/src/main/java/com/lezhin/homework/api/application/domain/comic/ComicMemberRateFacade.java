@@ -23,7 +23,7 @@ public class ComicMemberRateFacade {
         boolean lock = lockService.getLock(lockKey, 5);
         if (lock) {
             ComicMemberRate comicMemberRate = comicMemberRateService.rateComic(memberId, request);
-            comicMemberRateService.countComicLikeAndDislikeCount(comicId);
+            comicMemberRateService.updateComicLikeAndDislikeCount(comicId);
             lockService.releaseLock(lockKey);
             return comicMemberRate;
         } else {

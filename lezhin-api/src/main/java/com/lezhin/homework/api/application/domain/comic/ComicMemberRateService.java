@@ -9,11 +9,14 @@ import com.lezhin.homework.core.db.domain.comic.rate.ComicMemberRateRepository;
 import com.lezhin.homework.core.db.domain.member.Member;
 import com.lezhin.homework.core.db.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.lezhin.homework.api.application.config.ApiCacheConfig.TOP_DISLIKES_COMICS;
+import static com.lezhin.homework.api.application.config.ApiCacheConfig.TOP_LIKES_COMICS;
 import static com.lezhin.homework.api.exception.ExceptionConstants.NOT_FOUND_COMIC_MESSAGE;
 import static com.lezhin.homework.api.exception.ExceptionConstants.NOT_FOUND_MEMBER_MESSAGE;
 
@@ -41,8 +44,9 @@ public class ComicMemberRateService {
         return comicMemberRateRepository.save(comicMemberRate);
     }
 
+    @CacheEvict(value = {TOP_LIKES_COMICS, TOP_DISLIKES_COMICS})
     @Transactional
-    public Comic countComicLikeAndDislikeCount(final long comicId) {
+    public Comic updateComicLikeAndDislikeCount(final long comicId) {
         Comic comic = comicRepository.findById(comicId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_COMIC_MESSAGE.formatted(comicId)));
 
