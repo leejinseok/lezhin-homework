@@ -7,6 +7,8 @@ import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistoryRepositor
 import com.lezhin.homework.core.db.domain.member.Member;
 import com.lezhin.homework.core.db.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,11 @@ public class ComicViewHistoryService {
 
     private final ComicViewHistoryRepository comicViewHistoryRepository;
     private final MemberRepository memberRepository;
+
+    @Transactional(readOnly = true)
+    public Page<ComicViewHistory> findAllByComicId(final long comicId, final Pageable pageable) {
+        return comicViewHistoryRepository.findAllByComicId(comicId, pageable);
+    }
 
     @Transactional
     public void viewComic(final Comic comic, final long memberId) {
