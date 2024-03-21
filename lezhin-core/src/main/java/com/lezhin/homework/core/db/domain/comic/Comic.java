@@ -41,5 +41,10 @@ public class Comic {
     @Column
     private Long dislikes;
 
+    public void updateLikesAndDislikes(final long likes, final long dislikes) {
+        this.likes = likes;
+        this.dislikes = dislikes;
+    }
+
 
 }

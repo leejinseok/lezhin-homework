@@ -7,6 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -19,6 +23,7 @@ import lombok.NoArgsConstructor;
                 columnNames = {"comic_id", "member_id"}
         )
 })
+@EntityListeners(AuditingEntityListener.class)
 public class ComicMemberRate {
 
     @Id
@@ -46,6 +51,19 @@ public class ComicMemberRate {
 
     @Column
     private String comment;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime registerDateTime;
+
+    public static ComicMemberRate create(final Comic comic, final Member member, final boolean isLike, final String comment) {
+        ComicMemberRate rate = new ComicMemberRate();
+        rate.comic = comic;
+        rate.member = member;
+        rate.isLike = isLike;
+        rate.comment = comment;
+        return rate;
+    }
 
 
 }
