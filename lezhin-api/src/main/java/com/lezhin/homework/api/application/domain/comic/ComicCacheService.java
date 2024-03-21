@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.lezhin.homework.api.application.config.ApiCacheConfig.TOP_DISLIKES_COMICS;
 import static com.lezhin.homework.api.application.config.ApiCacheConfig.TOP_LIKES_COMICS;
 
 @Slf4j
@@ -41,6 +42,22 @@ public class ComicCacheService {
     }
 
     public List<Comic> comicsTopDislikesThree() {
-        return comicRepository.findTopDislikesThree();
+        List<Comic> cache = getTopDislikesComicCache();
+        if (ObjectUtils.isNotEmpty(cache)) {
+            return cache;
+        }
+
+        List<Comic> topDislikesThree = comicRepository.findTopDislikesThree();
+        putTopDislikesComicCache(topDislikesThree);
+        return topDislikesThree;
     }
+
+    private List<Comic> getTopDislikesComicCache() {
+        return (List<Comic>) cacheManager.getCache(TOP_DISLIKES_COMICS).get("LIST", List.class);
+    }
+
+    private void putTopDislikesComicCache(List<Comic> comics) {
+        cacheManager.getCache(TOP_DISLIKES_COMICS).put("LIST", comics);
+    }
+
 }

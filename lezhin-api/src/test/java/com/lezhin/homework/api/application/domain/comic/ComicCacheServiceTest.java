@@ -37,6 +37,7 @@ class ComicCacheServiceTest {
     @Configuration
     @EnableCaching
     static class CacheConfig {
+
         @Bean
         public CacheManager cacheManager() {
             SimpleCacheManager cacheManager = new SimpleCacheManager();
@@ -68,7 +69,7 @@ class ComicCacheServiceTest {
         }
     }
 
-    @DisplayName("좋아요 많은 웹툰 3개 조회할때 캐싱이 제대로 이루어 지는가?")
+    @DisplayName("좋아요 많은순으로 웹툰 3개를 조회할때 캐싱이 제대로 이루어 지는가?")
     @Test
     void comicsTopLikesThree() {
         when(comicRepository.findTopLikesThree()).thenReturn(
@@ -79,13 +80,36 @@ class ComicCacheServiceTest {
                 )
         );
 
+        // 캐싱이 이루어지기 때문에 첫번째 호출 이후에는 캐싱에서 조회가 되어야 함
         ComicCacheService comicCacheService = new ComicCacheService(cacheManager, comicRepository);
         comicCacheService.comicsTopLikesThree();
         comicCacheService.comicsTopLikesThree();
         comicCacheService.comicsTopLikesThree();
-        comicCacheService.comicsTopLikesThree();
-        comicCacheService.comicsTopLikesThree();
 
+        // 그러므로 실제 DB 조회는 한번만 일어나야한다
         verify(comicRepository, times(1)).findTopLikesThree();
     }
+
+    @DisplayName("싫어요 많은순으로 웹툰 3개를 조회할때 캐싱이 제대로 이루어 지는가?")
+    @Test
+    void comicsTopDislikesThree() {
+        when(comicRepository.findTopDislikesThree()).thenReturn(
+                List.of(
+                        new Comic(),
+                        new Comic(),
+                        new Comic()
+                )
+        );
+
+        // 캐싱이 이루어지기 때문에 첫번째 호출 이후에는 캐싱에서 조회가 되어야 함
+        ComicCacheService comicCacheService = new ComicCacheService(cacheManager, comicRepository);
+        comicCacheService.comicsTopDislikesThree();
+        comicCacheService.comicsTopDislikesThree();
+        comicCacheService.comicsTopDislikesThree();
+
+        // 그러므로 실제 DB 조회는 한번만 일어나야한다
+        verify(comicRepository, times(1)).findTopDislikesThree();
+    }
+
+
 }
