@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "comic_search_history")
-public class ComicSearchHistory {
+public class ComicViewHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +39,14 @@ public class ComicSearchHistory {
     private Comic comic;
 
     @Column
-    private LocalDateTime searchDateTime;
+    private LocalDateTime viewDateTime;
+
+    public static ComicViewHistory create(final Member member, final Comic comic, final LocalDateTime viewDateTime) {
+        ComicViewHistory viewHistory = new ComicViewHistory();
+        viewHistory.member = member;
+        viewHistory.comic = comic;
+        viewHistory.viewDateTime = viewDateTime;
+        return viewHistory;
+    }
 
 }

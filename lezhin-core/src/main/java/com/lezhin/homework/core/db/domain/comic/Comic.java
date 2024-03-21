@@ -36,10 +36,10 @@ public class Comic {
     private LocalDate openDate;
 
     @Column
-    private Long likes;
+    private long likes;
 
     @Column
-    private Long dislikes;
+    private long dislikes;
 
     public void updateLikesAndDislikes(final long likes, final long dislikes) {
         this.likes = likes;
