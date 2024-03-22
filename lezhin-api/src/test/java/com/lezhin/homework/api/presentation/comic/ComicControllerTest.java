@@ -10,6 +10,7 @@ import com.lezhin.homework.api.application.domain.comic.ComicViewHistoryService;
 import com.lezhin.homework.api.application.util.AES256Util;
 import com.lezhin.homework.core.db.domain.author.Author;
 import com.lezhin.homework.core.db.domain.comic.Comic;
+import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistory;
 import com.lezhin.homework.core.db.domain.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,6 +167,63 @@ class ComicControllerTest {
                 .andExpect(jsonPath("$.openDate").exists())
                 .andExpect(jsonPath("$.likes").value(sampleComic.getLikes()))
                 .andExpect(jsonPath("$.dislikes").value(sampleComic.getDislikes()));
+    }
+
+    @DisplayName("웹툰 조회내역 조회")
+    @Test
+    void getComicViewHistories() throws Exception {
+        Member member = createSampleMember();
+        String token = jwtProvider.createToken(member);
+
+        Author author = createSampleAuthor(1L);
+        Comic comic = createSampleComic(1L, author, new BigDecimal(0));
+
+        List<ComicViewHistory> content = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            ComicViewHistory viewHistory = ComicViewHistory.builder()
+                    .id(1L)
+                    .member(member)
+                    .comic(comic)
+                    .viewDateTime(LocalDateTime.now())
+                    .build();
+            content.add(viewHistory);
+        }
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        when(comicViewHistoryService.findAllByComicId(anyLong(), any())).thenReturn(
+                new PageImpl<>(content, pageRequest, 10)
+        );
+
+        mockMvc.perform(
+                        get("/api/v1/comics/1/view-histories")
+                                .param("pageNo", "0")
+                                .param("pageSize", "10")
+                                .header("Authorization", "Bearer " + token)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pageInfo.currentPage").exists())
+                .andExpect(jsonPath("$.pageInfo.totalPages").exists())
+                .andExpect(jsonPath("$.pageInfo.size").exists())
+                .andExpect(jsonPath("$.pageInfo.totalElements").exists())
+                .andExpect(jsonPath("$.pageInfo.sort").exists())
+                .andExpect(jsonPath("$.pageInfo.last").exists())
+                .andExpect(jsonPath("$.list[0].id").exists())
+                .andExpect(jsonPath("$.list[0].comic.id").exists())
+                .andExpect(jsonPath("$.list[0].comic.contentsName").exists())
+                .andExpect(jsonPath("$.list[0].comic.author.id").exists())
+                .andExpect(jsonPath("$.list[0].comic.author.nickname").exists())
+                .andExpect(jsonPath("$.list[0].comic.coin").exists())
+                .andExpect(jsonPath("$.list[0].comic.openDate").exists())
+                .andExpect(jsonPath("$.list[0].comic.likes").exists())
+                .andExpect(jsonPath("$.list[0].comic.dislikes").exists())
+                .andExpect(jsonPath("$.list[0].member.id").exists())
+                .andExpect(jsonPath("$.list[0].member.userName").exists())
+                .andExpect(jsonPath("$.list[0].member.userEmail").exists())
+                .andExpect(jsonPath("$.list[0].member.gender").exists())
+                .andExpect(jsonPath("$.list[0].member.type").exists())
+                .andExpect(jsonPath("$.list[0].member.registerDateTime").exists())
+                .andExpect(jsonPath("$.list[0].viewDateTime").exists());
     }
 
 }

@@ -5,6 +5,8 @@ import com.lezhin.homework.core.db.domain.Gender;
 import com.lezhin.homework.core.db.domain.member.Member;
 import com.lezhin.homework.core.db.domain.member.MemberType;
 
+import java.time.LocalDateTime;
+
 public class MemberFactory {
 
     public static Member createSampleMember() {
@@ -15,6 +17,7 @@ public class MemberFactory {
                 .type(MemberType.NORMAL)
                 .password("password")
                 .userEmail(AES256Util.encrypt("lezhin@lezhin.com"))
+                .registerDateTime(LocalDateTime.now())
                 .build();
     }
 }

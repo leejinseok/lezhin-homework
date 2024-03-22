@@ -6,6 +6,7 @@ import com.lezhin.homework.api.application.domain.comic.ComicService;
 import com.lezhin.homework.api.application.domain.comic.ComicViewHistoryService;
 import com.lezhin.homework.api.presentation.comic.dto.ComicResponse;
 import com.lezhin.homework.api.presentation.comic.dto.ComicViewHistoryResponse;
+import com.lezhin.homework.api.presentation.common.dto.PageResponse;
 import com.lezhin.homework.core.db.domain.comic.Comic;
 import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistory;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -68,14 +69,15 @@ public class ComicController {
     }
 
     @GetMapping("/{comicId}/view-histories")
-    public ResponseEntity<Page<ComicViewHistoryResponse>> getComicViewHistories(
+    public ResponseEntity<PageResponse<ComicViewHistoryResponse>> getComicViewHistories(
             @PathVariable final long comicId,
             @Parameter(name = "pageNo", example = "0") final int pageNo,
             @Parameter(name = "pageSize", example = "10") final int pageSize
     ) {
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
         Page<ComicViewHistory> page = comicViewHistoryService.findAllByComicId(comicId, pageRequest);
-        Page<ComicViewHistoryResponse> body = page.map(ComicViewHistoryResponse::create);
+        Page<ComicViewHistoryResponse> map = page.map(ComicViewHistoryResponse::create);
+        PageResponse<ComicViewHistoryResponse> body = new PageResponse<>(map);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(body);
