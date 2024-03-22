@@ -53,5 +53,4 @@ public class Comic {
         this.coin = coin;
     }
 
-
 }

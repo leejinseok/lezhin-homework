@@ -8,6 +8,7 @@ import com.lezhin.homework.api.application.domain.comic.ComicCacheService;
 import com.lezhin.homework.api.application.domain.comic.ComicService;
 import com.lezhin.homework.api.application.domain.comic.ComicViewHistoryService;
 import com.lezhin.homework.api.application.util.AES256Util;
+import com.lezhin.homework.api.presentation.comic.dto.ComicRequest;
 import com.lezhin.homework.core.db.domain.author.Author;
 import com.lezhin.homework.core.db.domain.comic.Comic;
 import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -36,6 +38,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,6 +49,9 @@ class ComicControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -221,6 +227,37 @@ class ComicControllerTest {
                 .andExpect(jsonPath("$.list[0].member.type").exists())
                 .andExpect(jsonPath("$.list[0].member.registerDateTime").exists())
                 .andExpect(jsonPath("$.list[0].viewDateTime").exists());
+    }
+
+    @DisplayName("웹툰 변경 (유/무료)")
+    @Test
+    void updateComic() throws Exception {
+        Member member = createSampleMember(1L);
+        String token = jwtProvider.createToken(member);
+
+        ComicRequest request = ComicRequest.of(new BigDecimal(10));
+
+        when(comicService.updateComic(anyLong(), any())).thenReturn(
+                createSampleComic(1L, createSampleAuthor(1L), request.getCoin())
+        );
+
+        byte[] content = objectMapper.writeValueAsBytes(request);
+        mockMvc.perform(
+                        patch("/api/v1/comics/1")
+                                .header("Authorization", "Bearer " + token)
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.contentsName").exists())
+                .andExpect(jsonPath("$.author.id").exists())
+                .andExpect(jsonPath("$.author.nickname").exists())
+                .andExpect(jsonPath("$.coin").value(request.getCoin().toString()))
+                .andExpect(jsonPath("$.openDate").exists())
+                .andExpect(jsonPath("$.likes").exists())
+                .andExpect(jsonPath("$.dislikes").exists());
     }
 
 }

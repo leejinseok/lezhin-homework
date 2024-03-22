@@ -4,6 +4,7 @@ import com.lezhin.homework.api.application.config.jwt.MemberToken;
 import com.lezhin.homework.api.application.domain.comic.ComicCacheService;
 import com.lezhin.homework.api.application.domain.comic.ComicService;
 import com.lezhin.homework.api.application.domain.comic.ComicViewHistoryService;
+import com.lezhin.homework.api.presentation.comic.dto.ComicRequest;
 import com.lezhin.homework.api.presentation.comic.dto.ComicResponse;
 import com.lezhin.homework.api.presentation.comic.dto.ComicViewHistoryResponse;
 import com.lezhin.homework.api.presentation.common.dto.PageResponse;
@@ -18,10 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -81,6 +79,17 @@ public class ComicController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(body);
+    }
+
+    @PatchMapping("/{comicId}")
+    public ResponseEntity<ComicResponse> updateComic(
+            @PathVariable final long comicId,
+            @RequestBody final ComicRequest request
+    ) {
+        Comic comic = comicService.updateComic(comicId, request);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ComicResponse.create(comic));
     }
 
 }

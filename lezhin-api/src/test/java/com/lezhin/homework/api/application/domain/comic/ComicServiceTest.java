@@ -1,6 +1,7 @@
 package com.lezhin.homework.api.application.domain.comic;
 
 import com.lezhin.homework.api.application.config.ApiDbConfig;
+import com.lezhin.homework.api.presentation.comic.dto.ComicRequest;
 import com.lezhin.homework.core.db.domain.author.Author;
 import com.lezhin.homework.core.db.domain.author.AuthorRepository;
 import com.lezhin.homework.core.db.domain.comic.Comic;
@@ -49,14 +50,14 @@ class ComicServiceTest {
         ComicService comicService = new ComicService(comicRepository);
 
         // 유료 전환
-        BigDecimal updatedToPay = new BigDecimal(10);
-        Comic payComic = comicService.updateComicCoin(comicId, updatedToPay);
-        assertThat(payComic.getCoin().toString()).isEqualTo(updatedToPay.toString());
+        ComicRequest requestToPay = ComicRequest.of(new BigDecimal(10));
+        Comic payComic = comicService.updateComic(comicId, requestToPay);
+        assertThat(payComic.getCoin().toString()).isEqualTo(requestToPay.getCoin().toString());
 
         // 무료 전환
-        BigDecimal updatedToFree = new BigDecimal(0);
-        Comic freeComic = comicService.updateComicCoin(comicId, updatedToFree);
-        assertThat(freeComic.getCoin().toString()).isEqualTo(updatedToFree.toString());
+        ComicRequest requestToFree = ComicRequest.of(new BigDecimal(0));
+        Comic freeComic = comicService.updateComic(comicId, requestToFree);
+        assertThat(freeComic.getCoin().toString()).isEqualTo(requestToFree.getCoin().toString());
 
     }
 

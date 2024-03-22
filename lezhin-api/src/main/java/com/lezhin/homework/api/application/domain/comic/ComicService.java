@@ -1,6 +1,7 @@
 package com.lezhin.homework.api.application.domain.comic;
 
 import com.lezhin.homework.api.exception.NotFoundException;
+import com.lezhin.homework.api.presentation.comic.dto.ComicRequest;
 import com.lezhin.homework.core.db.domain.comic.Comic;
 import com.lezhin.homework.core.db.domain.comic.ComicRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,11 @@ public class ComicService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_COMIC_MESSAGE.formatted(comicId)));
     }
 
+
     @Transactional
-    public Comic updateComicCoin(final long comicId, final BigDecimal coin) {
+    public Comic updateComic(final long comicId, final ComicRequest request) {
         Comic comic = findById(comicId);
-        comic.updateCoin(coin);
+        comic.updateCoin(request.getCoin());
         return comic;
     }
 
