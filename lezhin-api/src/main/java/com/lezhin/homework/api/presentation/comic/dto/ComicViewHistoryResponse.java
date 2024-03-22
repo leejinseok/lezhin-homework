@@ -1,7 +1,7 @@
 package com.lezhin.homework.api.presentation.comic.dto;
 
 import com.lezhin.homework.api.presentation.member.dto.MemberResponse;
-import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistory;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

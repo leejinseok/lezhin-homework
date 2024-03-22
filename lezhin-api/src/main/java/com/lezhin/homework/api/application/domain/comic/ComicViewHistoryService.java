@@ -2,8 +2,8 @@ package com.lezhin.homework.api.application.domain.comic;
 
 import com.lezhin.homework.api.exception.NotFoundException;
 import com.lezhin.homework.core.db.domain.comic.Comic;
-import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistory;
-import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistoryRepository;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistoryRepository;
 import com.lezhin.homework.core.db.domain.member.Member;
 import com.lezhin.homework.core.db.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +40,15 @@ public class ComicViewHistoryService {
         );
 
         comicViewHistoryRepository.save(viewHistory);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Member> findAllMemberAdultComicVisitDateTimeBetween(
+            final LocalDateTime startDateTime,
+            final LocalDateTime endDateTime,
+            final Pageable pageable
+    ) {
+        return null;
     }
 
 }

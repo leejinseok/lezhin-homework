@@ -32,6 +32,9 @@ public class Comic {
     @Column
     private BigDecimal coin;
 
+    @Enumerated(EnumType.STRING)
+    private ComicType type;
+
     @Column
     private LocalDate openDate;
 

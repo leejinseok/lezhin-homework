@@ -1,4 +1,4 @@
-package com.lezhin.homework.core.db.domain.comic.search;
+package com.lezhin.homework.core.db.domain.comic.view;
 
 import com.lezhin.homework.core.db.domain.comic.Comic;
 import com.lezhin.homework.core.db.domain.member.Member;

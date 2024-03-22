@@ -10,7 +10,7 @@ import com.lezhin.homework.api.application.domain.comic.ComicViewHistoryService;
 import com.lezhin.homework.api.application.util.AES256Util;
 import com.lezhin.homework.core.db.domain.author.Author;
 import com.lezhin.homework.core.db.domain.comic.Comic;
-import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistory;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
 import com.lezhin.homework.core.db.domain.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

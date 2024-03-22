@@ -8,7 +8,7 @@ import com.lezhin.homework.api.presentation.comic.dto.ComicResponse;
 import com.lezhin.homework.api.presentation.comic.dto.ComicViewHistoryResponse;
 import com.lezhin.homework.api.presentation.common.dto.PageResponse;
 import com.lezhin.homework.core.db.domain.comic.Comic;
-import com.lezhin.homework.core.db.domain.comic.search.ComicViewHistory;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
