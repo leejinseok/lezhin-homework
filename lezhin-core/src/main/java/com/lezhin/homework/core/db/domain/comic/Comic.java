@@ -49,5 +49,9 @@ public class Comic {
         this.dislikes = dislikes;
     }
 
+    public void updateCoin(final BigDecimal coin) {
+        this.coin = coin;
+    }
+
 
 }

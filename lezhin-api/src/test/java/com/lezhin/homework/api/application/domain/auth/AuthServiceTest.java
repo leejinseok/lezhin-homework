@@ -19,10 +19,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import static com.lezhin.homework.api.presentation.auth.dto.SignUpRequestFactory.createSampleSignUpRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles({"test"})
 @DataJpaTest
 @Import({ApiDbConfig.class, JwtConfig.class})
 class AuthServiceTest {

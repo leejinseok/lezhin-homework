@@ -13,6 +13,10 @@
   - [x] service test 코드작성
   - [x] controller 작성
   - [x] controller 테스트 코드 작성
-- [ ] 특정 작품을 유료, 무료로 변경하는 api
+- [x] 특정 작품을 유료, 무료로 변경하는 api
+  - [x] service 작성
+  - [x] service 테스트
+  - [ ] controller 작성
+  - [ ] controller 테스트  코드 작성
 - [ ] 특정 사용자 삭제 api
   - [ ] 사용자의 평가, 조회 이력 함께 삭제
