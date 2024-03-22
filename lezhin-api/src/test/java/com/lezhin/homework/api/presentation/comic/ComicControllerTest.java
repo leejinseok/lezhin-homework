@@ -147,7 +147,7 @@ class ComicControllerTest {
         Author sampleAuthor = createSampleAuthor(1L);
         Comic sampleComic = createSampleComic(1L, sampleAuthor, new BigDecimal(0));
         when(comicService.findById(anyLong())).thenReturn(sampleComic);
-        doNothing().when(comicViewHistoryService).viewComic(any(), anyLong());
+        doNothing().when(comicViewHistoryService).saveViewHistory(any(), anyLong());
 
         mockMvc.perform(
                         get("/api/v1/comics/1")

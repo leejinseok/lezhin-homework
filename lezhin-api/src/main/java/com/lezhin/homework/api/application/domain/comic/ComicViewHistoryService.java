@@ -29,7 +29,7 @@ public class ComicViewHistoryService {
     }
 
     @Transactional
-    public void viewComic(final Comic comic, final long memberId) {
+    public void saveViewHistory(final Comic comic, final long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER_MESSAGE.formatted(memberId)));
 

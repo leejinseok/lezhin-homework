@@ -18,6 +18,7 @@ import static com.lezhin.homework.api.application.config.ApiCacheConfig.TOP_LIKE
 @RequiredArgsConstructor
 public class ComicCacheService {
 
+    private final static String LIST_KEY = "LIST";
 
     private final CacheManager cacheManager;
     private final ComicRepository comicRepository;
@@ -34,11 +35,13 @@ public class ComicCacheService {
     }
 
     private List<Comic> getTopLikesComicCache() {
-        return (List<Comic>) cacheManager.getCache(TOP_LIKES_COMICS).get("LIST", List.class);
+        return (List<Comic>) cacheManager
+                .getCache(TOP_LIKES_COMICS)
+                .get(LIST_KEY, List.class);
     }
 
     private void putTopLikesComicCache(List<Comic> comics) {
-        cacheManager.getCache(TOP_LIKES_COMICS).put("LIST", comics);
+        cacheManager.getCache(TOP_LIKES_COMICS).put(LIST_KEY, comics);
     }
 
     public List<Comic> comicsTopDislikesThree() {
@@ -53,11 +56,13 @@ public class ComicCacheService {
     }
 
     private List<Comic> getTopDislikesComicCache() {
-        return (List<Comic>) cacheManager.getCache(TOP_DISLIKES_COMICS).get("LIST", List.class);
+        return (List<Comic>) cacheManager
+                .getCache(TOP_DISLIKES_COMICS)
+                .get(LIST_KEY, List.class);
     }
 
     private void putTopDislikesComicCache(List<Comic> comics) {
-        cacheManager.getCache(TOP_DISLIKES_COMICS).put("LIST", comics);
+        cacheManager.getCache(TOP_DISLIKES_COMICS).put(LIST_KEY, comics);
     }
 
 }

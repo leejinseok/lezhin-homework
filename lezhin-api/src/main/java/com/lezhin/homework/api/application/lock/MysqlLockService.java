@@ -21,7 +21,6 @@ public class MysqlLockService implements LockService {
         query.setParameter(1, lockKey);
         query.setParameter(2, timeoutInSeconds);
 
-        // 실행 결과 처리
         Object result = query.getSingleResult();
         if (result instanceof Number) {
             int lockResult = ((Number) result).intValue();

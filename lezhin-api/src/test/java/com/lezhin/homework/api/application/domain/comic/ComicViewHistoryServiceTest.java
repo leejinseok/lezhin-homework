@@ -15,9 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.lezhin.homework.api.application.domain.author.AuthorFactory.createSampleAuthor;
@@ -50,9 +53,9 @@ class ComicViewHistoryServiceTest {
         authorRepository.deleteAll();
     }
 
-    @DisplayName("웹툰 조회")
+    @DisplayName("웹툰 조회내역 저장")
     @Test
-    void viewComic() {
+    void saveViewHistory() {
         Member sampleMember = createSampleMember();
         memberRepository.save(sampleMember);
 
@@ -63,10 +66,43 @@ class ComicViewHistoryServiceTest {
         comicRepository.save(sampleComic);
 
         ComicViewHistoryService service = new ComicViewHistoryService(comicViewHistoryRepository, memberRepository);
-        service.viewComic(sampleComic, sampleMember.getId());
+        service.saveViewHistory(sampleComic, sampleMember.getId());
 
         List<ComicViewHistory> all = comicViewHistoryRepository.findAll();
         assertThat(all.size()).isEqualTo(1);
+    }
+
+    @DisplayName("웹툰 조회내역 조회")
+    @Test
+    void findAllByComicId() {
+        Member sampleMember = createSampleMember();
+        memberRepository.save(sampleMember);
+
+        Author sampleAuthor = createSampleAuthor(null);
+        authorRepository.save(sampleAuthor);
+
+        Comic sampleComic = createSampleComic(null, sampleAuthor, new BigDecimal(0));
+        comicRepository.save(sampleComic);
+
+        for (int i = 0; i < 10; i++) {
+            ComicViewHistory viewHistory = ComicViewHistory.create(
+                    sampleMember, sampleComic, LocalDateTime.now()
+            );
+
+            comicViewHistoryRepository.save(viewHistory);
+        }
+
+        ComicViewHistoryService service = new ComicViewHistoryService(comicViewHistoryRepository, memberRepository);
+        Page<ComicViewHistory> page = service.findAllByComicId(sampleComic.getId(), PageRequest.of(0, 10));
+
+        assertThat(page.getTotalPages()).isEqualTo(1);
+        assertThat(page.getTotalElements()).isEqualTo(10);
+
+        ComicViewHistory firstViewHistory = page.getContent().get(0);
+        assertThat(firstViewHistory.getId()).isNotNull();
+        assertThat(firstViewHistory.getComic()).isNotNull();
+        assertThat(firstViewHistory.getMember()).isNotNull();
+        assertThat(firstViewHistory.getViewDateTime()).isNotNull();
     }
 
 }

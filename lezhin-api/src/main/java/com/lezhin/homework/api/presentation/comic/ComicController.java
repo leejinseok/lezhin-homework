@@ -59,7 +59,7 @@ public class ComicController {
             @AuthenticationPrincipal final MemberToken memberToken
     ) {
         Comic comic = comicService.findById(comicId);
-        comicViewHistoryService.viewComic(comic, memberToken.getId());
+        comicViewHistoryService.saveViewHistory(comic, memberToken.getId());
 
         ComicResponse body = ComicResponse.create(comic);
         return ResponseEntity
