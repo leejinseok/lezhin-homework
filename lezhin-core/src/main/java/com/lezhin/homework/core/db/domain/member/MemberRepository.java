@@ -17,8 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 select count(comicViewHisotry) from ComicViewHistory comicViewHisotry
                 where
                     comicViewHisotry.member = member
-                    and comicViewHisotry.viewDateTime between :startDate and :endDate
-            ) >= 3
+            ) >= 3 and member.registerDateTime between :startDate and :endDate
             """)
-    Page<Member> findAllMemberAdultComicVisitDateTimeBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+    Page<Member> findAllMemberViewedAdultComicMoreThanThreeTimesAndRegisteredBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 }

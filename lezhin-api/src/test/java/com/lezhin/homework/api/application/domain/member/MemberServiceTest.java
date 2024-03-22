@@ -1,6 +1,6 @@
-package com.lezhin.homework.core.db.domain.member;
+package com.lezhin.homework.api.application.domain.member;
 
-import com.lezhin.homework.core.db.CoreTestConfiguration;
+import com.lezhin.homework.api.application.config.ApiDbConfig;
 import com.lezhin.homework.core.db.domain.Gender;
 import com.lezhin.homework.core.db.domain.author.Author;
 import com.lezhin.homework.core.db.domain.author.AuthorRepository;
@@ -9,29 +9,30 @@ import com.lezhin.homework.core.db.domain.comic.ComicRepository;
 import com.lezhin.homework.core.db.domain.comic.ComicType;
 import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
 import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistoryRepository;
+import com.lezhin.homework.core.db.domain.member.Member;
+import com.lezhin.homework.core.db.domain.member.MemberRepository;
+import com.lezhin.homework.core.db.domain.member.MemberType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static com.lezhin.homework.core.db.domain.author.AuthorFactory.createSampleAuthor;
+import static com.lezhin.homework.api.application.domain.author.AuthorFactory.createSampleAuthor;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles({"core-db", "test"})
+@ActiveProfiles({"test"})
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
-class MemberRepositoryTest {
+@Import({ApiDbConfig.class})
+class MemberServiceTest {
 
     @Autowired
     private ComicRepository comicRepository;
@@ -50,7 +51,7 @@ class MemberRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Author author = createSampleAuthor();
+        Author author = createSampleAuthor(null);
         authorRepository.save(author);
 
         Comic adultComic = Comic.builder()
@@ -101,13 +102,9 @@ class MemberRepositoryTest {
     @DisplayName("최근 일주일간 등록한 사용자중 성인물을 3회이상 조회한 사용자를 조회")
     @Test
     void findAllMemberViewedAdultComicMoreThanThreeTimesAndRegisteredBetween() {
-        Page<Member> page = memberRepository.findAllMemberViewedAdultComicMoreThanThreeTimesAndRegisteredBetween(
-                LocalDateTime.now().minusHours(1),
-                LocalDateTime.now().plusHours(1),
-                PageRequest.of(0, 10)
-        );
+        MemberService memberService = new MemberService(memberRepository);
+        Page<Member> page = memberService.findAllMemberViewedAdultComicMoreThanThreeTimesAndRegisteredInAWeek(PageRequest.of(0, 10));
         assertThat(page.getTotalPages()).isEqualTo(2);
         assertThat(page.getTotalElements()).isEqualTo(MEMBER_LENGTH);
     }
-
 }

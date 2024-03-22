@@ -48,9 +48,6 @@ class ComicControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private JwtProvider jwtProvider;
 
     @MockBean
@@ -145,7 +142,7 @@ class ComicControllerTest {
     @DisplayName("웹툰 조회")
     @Test
     void getComic() throws Exception {
-        Member sampleMember = createSampleMember();
+        Member sampleMember = createSampleMember(1L);
         String token = jwtProvider.createToken(sampleMember);
 
         Author sampleAuthor = createSampleAuthor(1L);
@@ -172,7 +169,7 @@ class ComicControllerTest {
     @DisplayName("웹툰 조회내역 조회")
     @Test
     void getComicViewHistories() throws Exception {
-        Member member = createSampleMember();
+        Member member = createSampleMember(1L);
         String token = jwtProvider.createToken(member);
 
         Author author = createSampleAuthor(1L);

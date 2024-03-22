@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 
 public class MemberFactory {
 
-    public static Member createSampleMember() {
+    public static Member createSampleMember(final Long id) {
         return Member.builder()
-                .id(1L)
+                .id(id)
                 .userName("김레진")
                 .gender(Gender.MALE)
                 .type(MemberType.NORMAL)
@@ -20,4 +20,6 @@ public class MemberFactory {
                 .registerDateTime(LocalDateTime.now())
                 .build();
     }
+
+
 }

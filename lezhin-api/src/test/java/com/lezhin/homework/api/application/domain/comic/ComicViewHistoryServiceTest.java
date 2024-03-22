@@ -56,7 +56,7 @@ class ComicViewHistoryServiceTest {
     @DisplayName("웹툰 조회내역 저장")
     @Test
     void saveViewHistory() {
-        Member sampleMember = createSampleMember();
+        Member sampleMember = createSampleMember(null);
         memberRepository.save(sampleMember);
 
         Author sampleAuthor = createSampleAuthor(null);
@@ -75,7 +75,7 @@ class ComicViewHistoryServiceTest {
     @DisplayName("웹툰 조회내역 조회")
     @Test
     void findAllByComicId() {
-        Member sampleMember = createSampleMember();
+        Member sampleMember = createSampleMember(null);
         memberRepository.save(sampleMember);
 
         Author sampleAuthor = createSampleAuthor(null);
