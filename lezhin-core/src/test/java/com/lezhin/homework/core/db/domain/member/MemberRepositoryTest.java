@@ -1,4 +1,4 @@
-package com.lezhin.homework.core.db.domain.comic.view;
+package com.lezhin.homework.core.db.domain.member;
 
 import com.lezhin.homework.core.db.CoreTestConfiguration;
 import com.lezhin.homework.core.db.domain.Gender;
@@ -7,9 +7,9 @@ import com.lezhin.homework.core.db.domain.author.AuthorRepository;
 import com.lezhin.homework.core.db.domain.comic.Comic;
 import com.lezhin.homework.core.db.domain.comic.ComicRepository;
 import com.lezhin.homework.core.db.domain.comic.ComicType;
-import com.lezhin.homework.core.db.domain.member.Member;
-import com.lezhin.homework.core.db.domain.member.MemberRepository;
-import com.lezhin.homework.core.db.domain.member.MemberType;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistoryQueryDslRepository;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistoryRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(classes = CoreTestConfiguration.class)
-class ComicViewHistoryQueryDslRepositoryTest {
+class MemberRepositoryTest {
 
     @Autowired
     private ComicRepository comicRepository;
@@ -46,8 +46,8 @@ class ComicViewHistoryQueryDslRepositoryTest {
     @Autowired
     private ComicViewHistoryRepository comicViewHistoryRepository;
 
-    @Autowired
-    private ComicViewHistoryQueryDslRepository comicViewHistoryQueryDslRepository;
+    private static final int MEMBER_LENGTH = 11;
+    private static final int VIEW_COUNT = 3;
 
     @BeforeEach
     void setUp() {
@@ -66,7 +66,7 @@ class ComicViewHistoryQueryDslRepositoryTest {
         comicRepository.save(adultComic);
 
         // 성인물 조회이력 남기기
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < MEMBER_LENGTH; i++) {
             Member member = Member.builder()
                     .type(MemberType.ADULT)
                     .registerDateTime(LocalDateTime.now().minusDays(1))
@@ -79,7 +79,7 @@ class ComicViewHistoryQueryDslRepositoryTest {
             memberRepository.save(member);
 
             LocalDateTime viewDateTime = LocalDateTime.now();
-            for (int j = 0; j < 2; j++) {
+            for (int j = 0; j < VIEW_COUNT; j++) {
                 ComicViewHistory comicViewHistory = ComicViewHistory.create(
                         member,
                         adultComic,
@@ -99,17 +99,16 @@ class ComicViewHistoryQueryDslRepositoryTest {
         memberRepository.deleteAll();
     }
 
-    @DisplayName("특정 기간동안 성인물을 조회한 사용자를 조회")
+    @DisplayName("특정 기간동안 성인물을 3회이상 조회한 사용자를 조회")
     @Test
     void findAllMemberAdultComicVisitDateTimeBetween() {
-        Page<Member> page = comicViewHistoryQueryDslRepository.findAllMemberAdultComicVisitDateTimeBetween(
+        Page<Member> page = memberRepository.findAllMemberAdultComicVisitDateTimeBetween(
                 LocalDateTime.now().minusHours(1),
                 LocalDateTime.now().plusHours(1),
                 PageRequest.of(0, 10)
         );
-
-        assertThat(page.getTotalElements()).isEqualTo(11);
         assertThat(page.getTotalPages()).isEqualTo(2);
+        assertThat(page.getTotalElements()).isEqualTo(MEMBER_LENGTH);
     }
 
 }
