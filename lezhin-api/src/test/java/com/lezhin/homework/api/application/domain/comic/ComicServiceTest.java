@@ -56,7 +56,7 @@ class ComicServiceTest {
         ComicService comicService = new ComicService(comicRepository);
 
         // 유료 전환
-        ComicRequest requestToPay = ComicRequest.of(new BigDecimal(10));
+        ComicRequest requestToPay = ComicRequest.of(new BigDecimal(120));
         Comic payComic = comicService.updateComic(comicId, requestToPay);
         assertThat(payComic.getCoin().toString()).isEqualTo(requestToPay.getCoin().toString());
 
@@ -70,10 +70,19 @@ class ComicServiceTest {
     @Test
     void updateComicCoinNotValidPaidCoin() {
         ComicService comicService = createComicService();
+
+        // 500원 초과
         ComicRequest requestToPay = ComicRequest.of(new BigDecimal(501));
         assertThrows(BadRequestException.class, () -> {
             comicService.updateComic(comicId, requestToPay);
         });
+
+        // 100원 미만
+        ComicRequest requestToPayUnder100 = ComicRequest.of(new BigDecimal(99));
+        assertThrows(BadRequestException.class, () -> {
+            comicService.updateComic(comicId, requestToPayUnder100);
+        });
+
     }
 
     @DisplayName("유료 가격 검증")
