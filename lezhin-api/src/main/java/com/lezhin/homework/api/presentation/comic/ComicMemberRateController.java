@@ -7,6 +7,7 @@ import com.lezhin.homework.api.presentation.comic.dto.ComicMemberRateResponse;
 import com.lezhin.homework.core.db.domain.comic.rate.ComicMemberRate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class ComicMemberRateController {
     @Operation(summary = "평가 작성", description = "평가 작성")
     @PostMapping
     public ResponseEntity<ComicMemberRateResponse> rateComic(
-            @RequestBody final ComicMemberRateRequest request,
+            @RequestBody @Valid final ComicMemberRateRequest request,
             @AuthenticationPrincipal final MemberToken memberToken
     ) {
         ComicMemberRate comicMemberRate = comicMemberRateFacade.rateComicWithLock(memberToken.getId(), request);

@@ -21,11 +21,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
+import static com.lezhin.homework.api.application.domain.member.MemberFactory.createSampleMember;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {ComicMemberRateController.class})
 @Import({ApiSecurityConfig.class, JwtConfig.class})
@@ -75,6 +78,26 @@ class ComicMemberRateControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + token)
         ).andDo(print());
+    }
+
+    @DisplayName("웹툰 평가 (특수문자 포함)")
+    @Test
+    void rateComicWithSpecialChar() throws Exception {
+        Member member = createSampleMember(1L);
+        String token = jwtProvider.createToken(member);
+
+        ComicMemberRateRequest request = ComicMemberRateRequest.of(1L, true, "특수문자 포함!@#$%^&*()");
+        byte[] content = objectMapper.writeValueAsBytes(request);
+
+        mockMvc.perform(
+                        post("/api/v1/comic-member-rate")
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + token)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]").value("특수 문자는 사용할 수 없습니다."));
     }
 
 }
