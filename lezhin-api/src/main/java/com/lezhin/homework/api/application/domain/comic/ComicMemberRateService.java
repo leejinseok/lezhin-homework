@@ -11,6 +11,7 @@ import com.lezhin.homework.core.db.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -28,6 +29,11 @@ public class ComicMemberRateService {
     private final ComicMemberRateRepository comicMemberRateRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
+    public List<ComicMemberRate> findAll() {
+        return comicMemberRateRepository.findAll();
+    }
+
     @Transactional
     public ComicMemberRate rateComic(final long memberId, final ComicMemberRateRequest request) {
         long comicId = request.getComicId();
@@ -37,9 +43,11 @@ public class ComicMemberRateService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER_MESSAGE.formatted(memberId)));
 
-        ComicMemberRate comicMemberRate = ComicMemberRate.create(
-                comic, member, request.isLike(), request.getComment()
+        ComicMemberRate comicMemberRate = ComicMemberRate.of(
+                request.isLike(), request.getComment()
         );
+        comicMemberRate.setMember(member);
+        comicMemberRate.setComic(comic);
 
         return comicMemberRateRepository.save(comicMemberRate);
     }

@@ -79,11 +79,11 @@ class MemberRepositoryTest {
 
             LocalDateTime viewDateTime = LocalDateTime.now();
             for (int j = 0; j < VIEW_COUNT; j++) {
-                ComicViewHistory comicViewHistory = ComicViewHistory.create(
-                        member,
-                        adultComic,
+                ComicViewHistory comicViewHistory = ComicViewHistory.of(
                         viewDateTime
                 );
+                comicViewHistory.setMember(member);
+                comicViewHistory.setComic(adultComic);
                 comicViewHistoryRepository.save(comicViewHistory);
                 viewDateTime = viewDateTime.plusMinutes(1);
             }
@@ -93,9 +93,9 @@ class MemberRepositoryTest {
     @AfterEach
     void tearDown() {
         comicViewHistoryRepository.deleteAll();
+        memberRepository.deleteAll();
         comicRepository.deleteAll();
         authorRepository.deleteAll();
-        memberRepository.deleteAll();
     }
 
     @DisplayName("최근 일주일간 등록한 사용자중 성인물을 3회이상 조회한 사용자를 조회")

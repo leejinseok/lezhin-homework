@@ -56,14 +56,19 @@ public class ComicMemberRate {
     @Column(updatable = false)
     private LocalDateTime registerDateTime;
 
-    public static ComicMemberRate create(final Comic comic, final Member member, final boolean isLike, final String comment) {
+    public static ComicMemberRate of(final boolean isLike, final String comment) {
         ComicMemberRate rate = new ComicMemberRate();
-        rate.comic = comic;
-        rate.member = member;
         rate.isLike = isLike;
         rate.comment = comment;
         return rate;
     }
 
+    public void setMember(final Member member) {
+        this.member = member;
+        member.getComicMemberRates().add(this);
+    }
 
+    public void setComic(final Comic comic) {
+        this.comic = comic;
+    }
 }

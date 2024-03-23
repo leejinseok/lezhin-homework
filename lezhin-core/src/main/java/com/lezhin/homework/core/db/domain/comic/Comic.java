@@ -1,6 +1,7 @@
 package com.lezhin.homework.core.db.domain.comic;
 
 import com.lezhin.homework.core.db.domain.author.Author;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,6 +45,7 @@ public class Comic {
     @Column
     private long dislikes;
 
+
     public void updateLikesAndDislikes(final long likes, final long dislikes) {
         this.likes = likes;
         this.dislikes = dislikes;
@@ -52,5 +54,6 @@ public class Comic {
     public void updateCoin(final BigDecimal coin) {
         this.coin = coin;
     }
+
 
 }

@@ -48,8 +48,8 @@ class ComicViewHistoryServiceTest {
     @AfterEach
     void teardown() {
         comicViewHistoryRepository.deleteAll();
-        comicRepository.deleteAll();
         memberRepository.deleteAll();
+        comicRepository.deleteAll();
         authorRepository.deleteAll();
     }
 
@@ -85,9 +85,11 @@ class ComicViewHistoryServiceTest {
         comicRepository.save(sampleComic);
 
         for (int i = 0; i < 10; i++) {
-            ComicViewHistory viewHistory = ComicViewHistory.create(
-                    sampleMember, sampleComic, LocalDateTime.now()
+            ComicViewHistory viewHistory = ComicViewHistory.of(
+                    LocalDateTime.now()
             );
+            viewHistory.setMember(sampleMember);
+            viewHistory.setComic(sampleComic);
 
             comicViewHistoryRepository.save(viewHistory);
         }

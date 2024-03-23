@@ -1,6 +1,8 @@
 package com.lezhin.homework.core.db.domain.member;
 
 import com.lezhin.homework.core.db.domain.Gender;
+import com.lezhin.homework.core.db.domain.comic.rate.ComicMemberRate;
+import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +12,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -45,6 +49,14 @@ public class Member {
     @Column(updatable = false)
     private LocalDateTime registerDateTime;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    private List<ComicMemberRate> comicMemberRates = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    private List<ComicViewHistory> comicViewHistories = new ArrayList<>();
+
     public static Member create(
             final String username,
             final String userEmail,
@@ -62,5 +74,6 @@ public class Member {
                 .registerDateTime(registerDateTime)
                 .build();
     }
+
 
 }

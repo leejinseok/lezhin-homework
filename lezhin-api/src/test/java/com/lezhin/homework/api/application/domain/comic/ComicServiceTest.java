@@ -47,7 +47,7 @@ class ComicServiceTest {
     @DisplayName("유료/무료 전환 테스트")
     @Test
     void updateComicCoin() {
-        ComicService comicService = new ComicService(comicRepository);
+        ComicService comicService = new ComicService(comicRepository, authorRepository);
 
         // 유료 전환
         ComicRequest requestToPay = ComicRequest.of(new BigDecimal(10));

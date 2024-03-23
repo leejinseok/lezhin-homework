@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "comic_search_history")
+@Table(name = "comic_view_history")
 public class ComicViewHistory {
 
     @Id
@@ -25,7 +25,7 @@ public class ComicViewHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "member_id",
-            foreignKey = @ForeignKey(name = "fk_comic_search_history_1"),
+            foreignKey = @ForeignKey(name = "fk_comic_view_history_1"),
             nullable = false
     )
     private Member member;
@@ -33,7 +33,7 @@ public class ComicViewHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "comic_id",
-            foreignKey = @ForeignKey(name = "fk_comic_search_history_2"),
+            foreignKey = @ForeignKey(name = "fk_comic_view_history_2"),
             nullable = false
     )
     private Comic comic;
@@ -41,12 +41,19 @@ public class ComicViewHistory {
     @Column
     private LocalDateTime viewDateTime;
 
-    public static ComicViewHistory create(final Member member, final Comic comic, final LocalDateTime viewDateTime) {
+    public static ComicViewHistory of(final LocalDateTime viewDateTime) {
         ComicViewHistory viewHistory = new ComicViewHistory();
-        viewHistory.member = member;
-        viewHistory.comic = comic;
         viewHistory.viewDateTime = viewDateTime;
         return viewHistory;
+    }
+
+    public void setMember(final Member member) {
+        this.member = member;
+        member.getComicViewHistories().add(this);
+    }
+
+    public void setComic(final Comic comic) {
+        this.comic = comic;
     }
 
 }

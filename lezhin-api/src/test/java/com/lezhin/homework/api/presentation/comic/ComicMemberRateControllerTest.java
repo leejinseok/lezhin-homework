@@ -63,9 +63,11 @@ class ComicMemberRateControllerTest {
                 .dislikes(1L)
                 .build();
 
-        when(comicMemberRateFacade.rateComicWithLock(anyLong(), any())).thenReturn(
-                ComicMemberRate.create(comic, member, request.isLike(), request.getComment())
-        );
+        ComicMemberRate comicMemberRate = ComicMemberRate.of(request.isLike(), request.getComment());
+        comicMemberRate.setMember(member);
+        comicMemberRate.setComic(comic);
+
+        when(comicMemberRateFacade.rateComicWithLock(anyLong(), any())).thenReturn(comicMemberRate);
 
         mockMvc.perform(
                 post("/api/v1/comic-member-rate")

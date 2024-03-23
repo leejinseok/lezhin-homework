@@ -33,22 +33,14 @@ public class ComicViewHistoryService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER_MESSAGE.formatted(memberId)));
 
-        ComicViewHistory viewHistory = ComicViewHistory.create(
-                member,
-                comic,
+        ComicViewHistory viewHistory = ComicViewHistory.of(
                 LocalDateTime.now()
         );
+        viewHistory.setMember(member);
+        viewHistory.setComic(comic);
 
         comicViewHistoryRepository.save(viewHistory);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Member> findAllMemberAdultComicVisitDateTimeBetween(
-            final LocalDateTime startDateTime,
-            final LocalDateTime endDateTime,
-            final Pageable pageable
-    ) {
-        return null;
-    }
 
 }
