@@ -10,6 +10,7 @@ import com.lezhin.homework.api.presentation.comic.dto.ComicViewHistoryResponse;
 import com.lezhin.homework.api.presentation.common.dto.PageResponse;
 import com.lezhin.homework.core.db.domain.comic.Comic;
 import com.lezhin.homework.core.db.domain.comic.view.ComicViewHistory;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Tag(name = "COMIC")
+@Tag(name = "웹툰 (Comic)")
 @RestController
 @RequestMapping("/api/v1/comics")
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class ComicController {
     private final ComicCacheService comicCacheService;
     private final ComicViewHistoryService comicViewHistoryService;
 
+    @Operation(summary = "좋아요 많은순으로 3개", description = "좋아요 많은순으로 3개")
     @GetMapping("/top-three-by-likes")
     public ResponseEntity<List<ComicResponse>> getByLikesDescThree() {
         List<Comic> comics = comicCacheService.comicsTopLikesThree();
@@ -43,6 +45,7 @@ public class ComicController {
                 .body(body);
     }
 
+    @Operation(summary = "싫어요 많은순으로 3개", description = "싫어요 많은순으로 3개")
     @GetMapping("top-three-by-dislikes")
     public ResponseEntity<List<ComicResponse>> getByDislikesDescThree() {
         List<Comic> comics = comicCacheService.comicsTopDislikesThree();
@@ -52,6 +55,7 @@ public class ComicController {
                 .body(body);
     }
 
+    @Operation(summary = "웹툰 조회 (단건)", description = "웹툰 조회 (단건)")
     @GetMapping("/{comicId}")
     public ResponseEntity<ComicResponse> getComic(
             @PathVariable final long comicId,
@@ -66,6 +70,7 @@ public class ComicController {
                 .body(body);
     }
 
+    @Operation(summary = "웹툰의 조회이력 조회", description = "웹툰의 조회이력 조회")
     @GetMapping("/{comicId}/view-histories")
     public ResponseEntity<PageResponse<ComicViewHistoryResponse>> getComicViewHistories(
             @PathVariable final long comicId,
@@ -81,6 +86,7 @@ public class ComicController {
                 .body(body);
     }
 
+    @Operation(summary = "웹툰 수정 (유/무료)", description = "웹툰 수정 (유/무료)")
     @PatchMapping("/{comicId}")
     public ResponseEntity<ComicResponse> updateComic(
             @PathVariable final long comicId,

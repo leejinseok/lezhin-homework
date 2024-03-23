@@ -1,8 +1,6 @@
 package com.lezhin.homework.api.application.domain.member;
 
 import com.lezhin.homework.api.application.config.ApiDbConfig;
-import com.lezhin.homework.api.application.domain.comic.ComicMemberRateService;
-import com.lezhin.homework.api.presentation.comic.dto.ComicMemberRateRequest;
 import com.lezhin.homework.core.db.domain.Gender;
 import com.lezhin.homework.core.db.domain.author.Author;
 import com.lezhin.homework.core.db.domain.author.AuthorRepository;
@@ -24,7 +22,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -69,7 +66,7 @@ class MemberServiceTest {
     }
 
     MemberService createMemberService() {
-        return new MemberService(memberRepository, comicMemberRateRepository, comicViewHistoryRepository, new BCryptPasswordEncoder());
+        return new MemberService(memberRepository);
     }
 
     @DisplayName("최근 일주일간 등록한 사용자중 성인물을 3회이상 조회한 사용자를 조회")

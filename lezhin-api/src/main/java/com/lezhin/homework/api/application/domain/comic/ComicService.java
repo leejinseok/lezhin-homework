@@ -22,26 +22,6 @@ public class ComicService {
     private final ComicRepository comicRepository;
     private final AuthorRepository authorRepository;
 
-    @Transactional
-    public Comic save(final ComicRequest comicRequest) {
-        long authorId = comicRequest.getAuthorId();
-        Author author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_AUTHOR_MESSAGE.formatted(authorId)));
-
-        Comic comic = Comic
-                .builder()
-                .contentsName(comicRequest.getContentsName())
-                .author(author)
-                .type(comicRequest.getType())
-                .coin(comicRequest.getCoin())
-                .likes(comicRequest.getLikes())
-                .dislikes(comicRequest.getDislikes())
-                .openDate(comicRequest.getOpenDate())
-                .build();
-
-        return comicRepository.save(comic);
-    }
-
     @Transactional(readOnly = true)
     public Comic findById(final long comicId) {
         return comicRepository.findById(comicId)

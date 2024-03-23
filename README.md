@@ -19,11 +19,13 @@
     - [x] service 테스트
     - [x] controller 작성
     - [x] controller 테스트 코드 작성
-- [ ] 특정 사용자 삭제 api
+- [x] 특정 사용자 삭제 api
     - [x] service 작성
     - [x] service 테스트 코드 작성
-    - [ ] controller 작성
-    - [ ] controller 테스트코드 작성
+    - [x] controller 작성
+    - [x] controller 테스트코드 작성
 - [ ] 기타
+  - [x] swagger 정리
   - [ ] 평가 작성 > 댓글 특수문자 방지
   - [ ] 유료 변경시 100~500원 사이로만 가능하게
+  - [ ] README 작성
