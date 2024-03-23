@@ -86,6 +86,17 @@ public class ComicController {
                 .body(body);
     }
 
+    @Operation(summary = "웹툰 등록", description = "웹툰 등록")
+    @PostMapping
+    public ResponseEntity<ComicResponse> saveComic(
+            @RequestBody final ComicRequest request
+    ) {
+        Comic save = comicService.save(request);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ComicResponse.create(save));
+    }
+
     @Operation(summary = "웹툰 수정 (유/무료)", description = "웹툰 수정 (유/무료)")
     @PatchMapping("/{comicId}")
     public ResponseEntity<ComicResponse> updateComic(
