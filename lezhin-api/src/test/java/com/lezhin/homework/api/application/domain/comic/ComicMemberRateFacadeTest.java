@@ -1,7 +1,6 @@
 package com.lezhin.homework.api.application.domain.comic;
 
 import com.lezhin.homework.api.application.config.ApiDbConfig;
-import com.lezhin.homework.api.application.lock.LockService;
 import com.lezhin.homework.api.application.lock.PseudoLockService;
 import com.lezhin.homework.api.presentation.comic.dto.ComicMemberRateRequest;
 import com.lezhin.homework.core.db.domain.Gender;
@@ -10,7 +9,6 @@ import com.lezhin.homework.core.db.domain.author.AuthorRepository;
 import com.lezhin.homework.core.db.domain.comic.Comic;
 import com.lezhin.homework.core.db.domain.comic.ComicRepository;
 import com.lezhin.homework.core.db.domain.comic.rate.ComicMemberRate;
-import com.lezhin.homework.core.db.domain.comic.rate.ComicMemberRateRepository;
 import com.lezhin.homework.core.db.domain.member.Member;
 import com.lezhin.homework.core.db.domain.member.MemberRepository;
 import com.lezhin.homework.core.db.domain.member.MemberType;
@@ -20,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,13 +29,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles({"test"})
 @DataJpaTest
 @Import({ApiDbConfig.class})
+@ContextConfiguration(classes = {ComicMemberRateFacade.class, ComicMemberRateService.class, PseudoLockService.class})
 class ComicMemberRateFacadeTest {
 
     @Autowired
     private ComicRepository comicRepository;
-
-    @Autowired
-    private ComicMemberRateRepository comicMemberRateRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -44,17 +41,8 @@ class ComicMemberRateFacadeTest {
     @Autowired
     private AuthorRepository authorRepository;
 
-    ComicMemberRateFacade createComicMemberRateFacade() {
-        return new ComicMemberRateFacade(createMysqlLockService(), createComicMemberRateService());
-    }
-
-    ComicMemberRateService createComicMemberRateService() {
-        return new ComicMemberRateService(comicRepository, comicMemberRateRepository, memberRepository);
-    }
-
-    LockService createMysqlLockService() {
-        return new PseudoLockService();
-    }
+    @Autowired
+    private ComicMemberRateFacade comicMemberRateFacade;
 
     @DisplayName("웹툰 평가")
     @Test
@@ -92,7 +80,7 @@ class ComicMemberRateFacadeTest {
         ComicMemberRateRequest request = ComicMemberRateRequest.of(
                 comic.getId(), true, "재미있구만"
         );
-        ComicMemberRateFacade comicMemberRateFacade = createComicMemberRateFacade();
+//        ComicMemberRateFacade comicMemberRateFacade = createComicMemberRateFacade();
         ComicMemberRate comicMemberRate = comicMemberRateFacade.rateComicWithLock(
                 member.getId(),
                 request

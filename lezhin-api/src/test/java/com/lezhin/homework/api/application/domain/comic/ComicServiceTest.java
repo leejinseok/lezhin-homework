@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 
@@ -25,19 +26,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ActiveProfiles({"test"})
 @DataJpaTest
 @Import({ApiDbConfig.class})
+@ContextConfiguration(classes = ComicService.class)
 class ComicServiceTest {
 
     @Autowired
-    private ComicRepository comicRepository;
+    private ComicService comicService;
 
     @Autowired
     private AuthorRepository authorRepository;
 
-    private long comicId;
+    @Autowired
+    private ComicRepository comicRepository;
 
-    ComicService createComicService() {
-        return new ComicService(comicRepository);
-    }
+    private long comicId;
 
     @BeforeEach
     void setUp() {
@@ -53,8 +54,6 @@ class ComicServiceTest {
     @DisplayName("유료/무료 전환 테스트")
     @Test
     void updateComicCoin() {
-        ComicService comicService = new ComicService(comicRepository);
-
         // 유료 전환
         ComicRequest requestToPay = ComicRequest.of(new BigDecimal(120));
         Comic payComic = comicService.updateComic(comicId, requestToPay);
@@ -69,8 +68,6 @@ class ComicServiceTest {
     @DisplayName("유료/무료 전환 테스트 (유효하지 않은 유료 금액)")
     @Test
     void updateComicCoinNotValidPaidCoin() {
-        ComicService comicService = createComicService();
-
         // 500원 초과
         ComicRequest requestToPay = ComicRequest.of(new BigDecimal(501));
         assertThrows(BadRequestException.class, () -> {
@@ -88,7 +85,6 @@ class ComicServiceTest {
     @DisplayName("유료 가격 검증")
     @Test
     void validCoinRange() {
-        ComicService comicService = createComicService();
         assertThat(comicService.validPaidCoinRange(new BigDecimal(99))).isFalse();
         assertThat(comicService.validPaidCoinRange(new BigDecimal(100))).isTrue();
         assertThat(comicService.validPaidCoinRange(new BigDecimal(200))).isTrue();

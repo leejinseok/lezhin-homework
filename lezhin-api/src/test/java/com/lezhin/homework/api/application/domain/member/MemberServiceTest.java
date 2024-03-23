@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles({"test"})
 @DataJpaTest
-@Import({ApiDbConfig.class})
+@Import({ApiDbConfig.class, MemberService.class})
 class MemberServiceTest {
 
     @Autowired
@@ -53,6 +54,9 @@ class MemberServiceTest {
     @Autowired
     private ComicViewHistoryRepository comicViewHistoryRepository;
 
+    @Autowired
+    private MemberService memberService;
+
     private static final int MEMBER_LENGTH = 11;
     private static final int VIEW_COUNT = 3;
 
@@ -65,9 +69,6 @@ class MemberServiceTest {
         authorRepository.deleteAll();
     }
 
-    MemberService createMemberService() {
-        return new MemberService(memberRepository);
-    }
 
     @DisplayName("최근 일주일간 등록한 사용자중 성인물을 3회이상 조회한 사용자를 조회")
     @Test
@@ -112,7 +113,6 @@ class MemberServiceTest {
             }
         }
 
-        MemberService memberService = createMemberService();
         Page<Member> page = memberService.findAllMemberViewedAdultComicMoreThanThreeTimesAndRegisteredInAWeek(PageRequest.of(0, 10));
         assertThat(page.getTotalPages()).isEqualTo(2);
         assertThat(page.getTotalElements()).isEqualTo(MEMBER_LENGTH);
@@ -136,7 +136,6 @@ class MemberServiceTest {
         viewHistory.setComic(comic);
         comicViewHistoryRepository.save(viewHistory);
 
-        MemberService memberService = createMemberService();
         memberService.deleteById(member.getId());
 
         List<Member> members = memberRepository.findAll();

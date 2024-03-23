@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -26,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles({"test"})
 @DataJpaTest
-@Import({ApiDbConfig.class, JwtConfig.class})
+@Import({ApiDbConfig.class, JwtConfig.class, AuthService.class, AuthServiceTestConfig.class})
 class AuthServiceTest {
 
     @Autowired
@@ -35,22 +34,20 @@ class AuthServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    AuthService createAuthService() {
-        return new AuthService(jwtProvider, memberRepository, passwordEncoder);
-    }
+    @Autowired
+    private AuthService authService;
 
     @AfterEach
     void tearDown() {
         memberRepository.deleteAll();
     }
 
-
     @DisplayName("회원가입")
     @Test
     void signUp() {
-        AuthService authService = createAuthService();
 
         SignUpRequest signUpRequest = createSampleSignUpRequest();
         Member member = authService.signUp(signUpRequest);
@@ -73,7 +70,6 @@ class AuthServiceTest {
     @DisplayName("로그인")
     @Test
     void login() {
-        AuthService authService = createAuthService();
         SignUpRequest signUpRequest = createSampleSignUpRequest();
         authService.signUp(signUpRequest);
 

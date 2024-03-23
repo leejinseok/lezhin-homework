@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles({"test"})
 @DataJpaTest
 @Import({ApiDbConfig.class})
+@ContextConfiguration(classes = {ComicViewHistoryService.class})
 class ComicViewHistoryServiceTest {
 
     @Autowired
@@ -44,6 +46,9 @@ class ComicViewHistoryServiceTest {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private ComicViewHistoryService comicViewHistoryService;
 
     @AfterEach
     void teardown() {
@@ -65,8 +70,7 @@ class ComicViewHistoryServiceTest {
         Comic sampleComic = createSampleComic(null, sampleAuthor, new BigDecimal(0));
         comicRepository.save(sampleComic);
 
-        ComicViewHistoryService service = new ComicViewHistoryService(comicViewHistoryRepository, memberRepository);
-        service.saveViewHistory(sampleComic, sampleMember.getId());
+        comicViewHistoryService.saveViewHistory(sampleComic, sampleMember.getId());
 
         List<ComicViewHistory> all = comicViewHistoryRepository.findAll();
         assertThat(all.size()).isEqualTo(1);
@@ -94,8 +98,7 @@ class ComicViewHistoryServiceTest {
             comicViewHistoryRepository.save(viewHistory);
         }
 
-        ComicViewHistoryService service = new ComicViewHistoryService(comicViewHistoryRepository, memberRepository);
-        Page<ComicViewHistory> page = service.findAllByComicId(sampleComic.getId(), PageRequest.of(0, 10));
+        Page<ComicViewHistory> page = comicViewHistoryService.findAllByComicId(sampleComic.getId(), PageRequest.of(0, 10));
 
         assertThat(page.getTotalPages()).isEqualTo(1);
         assertThat(page.getTotalElements()).isEqualTo(10);
