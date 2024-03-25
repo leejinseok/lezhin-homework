@@ -9,6 +9,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.lezhin.homework.api.application.config.ApiCacheConfig.*;
 
@@ -16,7 +17,6 @@ import static com.lezhin.homework.api.application.config.ApiCacheConfig.*;
 @Service
 @RequiredArgsConstructor
 public class ComicCacheService {
-
 
     private final CacheManager cacheManager;
     private final ComicRepository comicRepository;
@@ -32,14 +32,15 @@ public class ComicCacheService {
         return topLikesThree;
     }
 
+    @SuppressWarnings("unchecked")
     private List<Comic> getTopLikesComicCache() {
-        return (List<Comic>) cacheManager
-                .getCache(TOP_LIKES_COMICS)
+        return (List<Comic>) Objects.requireNonNull(cacheManager.getCache(TOP_LIKES_COMICS))
                 .get(TOP_LIKES_COMICS_ALL, List.class);
     }
 
     private void putTopLikesComicCache(List<Comic> comics) {
-        cacheManager.getCache(TOP_LIKES_COMICS).put(TOP_LIKES_COMICS_ALL, comics);
+        Objects.requireNonNull(cacheManager.getCache(TOP_LIKES_COMICS))
+                .put(TOP_LIKES_COMICS_ALL, comics);
     }
 
     public List<Comic> comicsTopDislikesThree() {
@@ -53,14 +54,15 @@ public class ComicCacheService {
         return topDislikesThree;
     }
 
+    @SuppressWarnings("unchecked")
     private List<Comic> getTopDislikesComicCache() {
-        return (List<Comic>) cacheManager
-                .getCache(TOP_DISLIKES_COMICS)
+        return (List<Comic>) Objects.requireNonNull(cacheManager.getCache(TOP_DISLIKES_COMICS))
                 .get(TOP_DISLIKES_COMICS_ALL, List.class);
     }
 
     private void putTopDislikesComicCache(List<Comic> comics) {
-        cacheManager.getCache(TOP_DISLIKES_COMICS).put(TOP_DISLIKES_COMICS_ALL, comics);
+        Objects.requireNonNull(cacheManager.getCache(TOP_DISLIKES_COMICS))
+                .put(TOP_DISLIKES_COMICS_ALL, comics);
     }
 
 }

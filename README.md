@@ -113,24 +113,26 @@ url: /api/v1/comics/top-three-by-likes
 주소: http://localhost:8080/swagger-ui/index.html
 
 
-
 ## 🏃 Run Application
 
 테스트 실행
 
 ```shell
+chmod +x test.sh
 ./test.sh
 ```
 
 build파일 삭제
 
 ```shell
+chmod +x clean.sh
 ./clean.sh
 ```
 
 어플리케이션 실행
 
 ```shell
+chmod +x start.sh
 ./start.sh
 ```
 
