@@ -162,16 +162,9 @@ chmod +x start.sh
     - [x] service 테스트 코드 작성
     - [x] controller 작성
     - [x] controller 테스트코드 작성
-- [ ] 웹툰 등록
+- [x] 웹툰 등록
   - [x] 웹툰 등록 api
-  - [ ] 웹툰 등록 api test
   - [x] 웹툰 등록 service
-  - [ ] 웹툰 등록 service test
-- [ ] 작가 등록
-  - [x] 작가 등록 api
-  - [ ] 작가 등록 api test
-  - [x] 작가 등록 service 
-  - [ ] 작가 등록 service test
 - [x] 기타
     - [x] swagger 정리
     - [x] 평가 작성 > 댓글 특수문자 방지
