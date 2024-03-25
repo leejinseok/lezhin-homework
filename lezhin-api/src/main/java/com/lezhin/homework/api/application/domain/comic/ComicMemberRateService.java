@@ -9,15 +9,14 @@ import com.lezhin.homework.core.db.domain.comic.rate.ComicMemberRateRepository;
 import com.lezhin.homework.core.db.domain.member.Member;
 import com.lezhin.homework.core.db.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.lezhin.homework.api.application.config.ApiCacheConfig.TOP_DISLIKES_COMICS;
-import static com.lezhin.homework.api.application.config.ApiCacheConfig.TOP_LIKES_COMICS;
+import static com.lezhin.homework.api.application.config.ApiCacheConfig.*;
 import static com.lezhin.homework.api.exception.ExceptionConstants.NOT_FOUND_COMIC_MESSAGE;
 import static com.lezhin.homework.api.exception.ExceptionConstants.NOT_FOUND_MEMBER_MESSAGE;
 
@@ -28,6 +27,7 @@ public class ComicMemberRateService {
     private final ComicRepository comicRepository;
     private final ComicMemberRateRepository comicMemberRateRepository;
     private final MemberRepository memberRepository;
+    private final CacheManager cacheManager;
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<ComicMemberRate> findAll() {
@@ -52,7 +52,6 @@ public class ComicMemberRateService {
         return comicMemberRateRepository.save(comicMemberRate);
     }
 
-    @CacheEvict(value = {TOP_LIKES_COMICS, TOP_DISLIKES_COMICS})
     @Transactional
     public Comic updateComicLikeAndDislikeCount(final long comicId) {
         Comic comic = comicRepository.findById(comicId)
@@ -69,7 +68,15 @@ public class ComicMemberRateService {
             }
         }
         comic.updateLikesAndDislikes(likes, dislikes);
+
+        removeCache();
+
         return comic;
+    }
+
+    private void removeCache() {
+        cacheManager.getCache(TOP_LIKES_COMICS).evict(TOP_LIKES_COMICS_ALL);
+        cacheManager.getCache(TOP_DISLIKES_COMICS).evict(TOP_DISLIKES_COMICS_ALL);
     }
 
 }

@@ -19,11 +19,11 @@ public class JwtProvider {
     private static Long ACCESS_TOKEN_EXPIRE = (long) 1000 * 60 * 30; // 30분
     private static Long REFRESH_TOKEN_EXPIRE = (long) 1000 * 60 * 60 * 24 * 15; // 15일
 
-    public JwtProvider(String secret) {
+    public JwtProvider(final String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String createToken(Member member) {
+    public String createToken(final Member member) {
         Claims claims = getClaimsFrom(member);
         Date now = new Date();
 

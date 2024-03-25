@@ -34,7 +34,7 @@ public class AuthController {
                 member.getUserName(),
                 signUpRequest.getUserEmail(),
                 member.getGender(),
-                member.getType(),
+                member.getMemberType(),
                 member.getRegisterDateTime()
         );
 

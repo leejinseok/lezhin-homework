@@ -8,6 +8,7 @@ import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +18,9 @@ import java.util.concurrent.TimeUnit;
 public class ApiCacheConfig {
 
     public static final String TOP_LIKES_COMICS = "topLikesComics";
+    public static final String TOP_LIKES_COMICS_ALL = "topLikesComicsAll";
     public static final String TOP_DISLIKES_COMICS = "topDislikesComics";
+    public static final String TOP_DISLIKES_COMICS_ALL = "topDislikesComicsAll";
 
     @Bean
     public CacheManager cacheManager() {

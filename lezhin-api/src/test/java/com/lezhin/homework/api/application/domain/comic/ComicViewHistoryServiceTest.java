@@ -31,8 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles({"test"})
 @DataJpaTest
-@Import({ApiDbConfig.class})
-@ContextConfiguration(classes = {ComicViewHistoryService.class})
+@Import({ApiDbConfig.class, ComicViewHistoryService.class})
 class ComicViewHistoryServiceTest {
 
     @Autowired

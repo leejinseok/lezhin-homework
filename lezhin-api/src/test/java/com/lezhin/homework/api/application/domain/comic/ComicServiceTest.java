@@ -25,8 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles({"test"})
 @DataJpaTest
-@Import({ApiDbConfig.class})
-@ContextConfiguration(classes = ComicService.class)
+@Import({ApiDbConfig.class, ComicService.class})
 class ComicServiceTest {
 
     @Autowired

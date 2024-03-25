@@ -63,7 +63,7 @@ public class AuthService {
         String refreshToken = jwtProvider.createRefreshToken(member);
 
         MemberResponse memberResponse = MemberResponse.of(
-                member.getId(), member.getUserName(), email, member.getGender(), member.getType(), member.getRegisterDateTime()
+                member.getId(), member.getUserName(), email, member.getGender(), member.getMemberType(), member.getRegisterDateTime()
         );
         TokenResponse tokenResponse = TokenResponse.of(accessToken, refreshToken);
 

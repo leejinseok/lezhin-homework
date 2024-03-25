@@ -61,7 +61,7 @@ class AuthServiceTest {
         boolean passwordMatch = passwordEncoder.matches(signUpRequest.getPassword(), member.getPassword());
         assertThat(passwordMatch).isTrue();
 
-        assertThat(member.getType()).isEqualTo(signUpRequest.getType());
+        assertThat(member.getMemberType()).isEqualTo(signUpRequest.getType());
         assertThat(member.getGender()).isEqualTo(signUpRequest.getGender());
         assertThat(member.getUserName()).isEqualTo(signUpRequest.getUserName());
         assertThat(member.getRegisterDateTime()).isNotNull();

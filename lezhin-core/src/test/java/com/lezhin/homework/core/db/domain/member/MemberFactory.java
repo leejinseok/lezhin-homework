@@ -10,7 +10,7 @@ public class MemberFactory {
                 .userEmail("lezhin@lezhin.com")
                 .userName("김레진")
                 .password("password")
-                .type(MemberType.NORMAL)
+                .memberType(MemberType.NORMAL)
                 .gender(Gender.MALE)
                 .registerDateTime(LocalDateTime.now())
                 .build();

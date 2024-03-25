@@ -14,7 +14,7 @@ public class MemberFactory {
                 .id(id)
                 .userName("김레진")
                 .gender(Gender.MALE)
-                .type(MemberType.NORMAL)
+                .memberType(MemberType.NORMAL)
                 .password("password")
                 .userEmail(AES256Util.encrypt("lezhin@lezhin.com"))
                 .registerDateTime(LocalDateTime.now())

@@ -33,7 +33,7 @@ public class Comic {
     private BigDecimal coin;
 
     @Enumerated(EnumType.STRING)
-    private ComicType type;
+    private ComicType comicType;
 
     @Column
     private LocalDate openDate;
@@ -55,7 +55,7 @@ public class Comic {
         return Comic.builder()
                 .contentsName(contentsName)
                 .coin(coin)
-                .type(type)
+                .comicType(type)
                 .openDate(openDate)
                 .likes(likes)
                 .dislikes(dislikes)

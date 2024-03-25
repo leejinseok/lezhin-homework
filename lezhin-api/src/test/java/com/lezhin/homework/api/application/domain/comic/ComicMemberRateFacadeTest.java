@@ -1,5 +1,6 @@
 package com.lezhin.homework.api.application.domain.comic;
 
+import com.lezhin.homework.api.application.config.ApiCacheConfig;
 import com.lezhin.homework.api.application.config.ApiDbConfig;
 import com.lezhin.homework.api.application.lock.PseudoLockService;
 import com.lezhin.homework.api.presentation.comic.dto.ComicMemberRateRequest;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,8 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles({"test"})
 @DataJpaTest
-@Import({ApiDbConfig.class})
-@ContextConfiguration(classes = {ComicMemberRateFacade.class, ComicMemberRateService.class, PseudoLockService.class})
+@Import({ApiDbConfig.class, ApiCacheConfig.class, ComicMemberRateFacade.class, ComicMemberRateService.class, PseudoLockService.class})
 class ComicMemberRateFacadeTest {
 
     @Autowired
@@ -51,7 +50,7 @@ class ComicMemberRateFacadeTest {
                 .userEmail("lezhin@lezhin.com")
                 .userName("김레진")
                 .password("password")
-                .type(MemberType.NORMAL)
+                .memberType(MemberType.NORMAL)
                 .gender(Gender.MALE)
                 .registerDateTime(LocalDateTime.now())
                 .build();

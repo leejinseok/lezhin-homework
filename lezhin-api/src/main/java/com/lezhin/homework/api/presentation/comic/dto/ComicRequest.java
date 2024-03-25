@@ -34,4 +34,10 @@ public class ComicRequest {
     @Schema(example = "0")
     private long dislikes;
 
+    public static ComicRequest of(final BigDecimal coin) {
+        ComicRequest request = new ComicRequest();
+        request.coin = coin;
+        return request;
+    }
+
 }

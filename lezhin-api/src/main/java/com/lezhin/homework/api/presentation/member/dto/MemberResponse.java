@@ -39,7 +39,7 @@ public class MemberResponse {
                 member.getUserName(),
                 AES256Util.decrypt(member.getUserEmail()),
                 member.getGender(),
-                member.getType(),
+                member.getMemberType(),
                 member.getRegisterDateTime()
         );
     }

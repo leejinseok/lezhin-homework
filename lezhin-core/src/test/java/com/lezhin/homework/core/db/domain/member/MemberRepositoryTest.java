@@ -55,7 +55,7 @@ class MemberRepositoryTest {
 
         Comic adultComic = Comic.builder()
                 .contentsName("성인만화")
-                .type(ComicType.ADULT)
+                .comicType(ComicType.ADULT)
                 .likes(0)
                 .dislikes(0)
                 .author(author)
@@ -67,7 +67,7 @@ class MemberRepositoryTest {
         // 성인물 조회이력 남기기
         for (int i = 0; i < MEMBER_LENGTH; i++) {
             Member member = Member.builder()
-                    .type(MemberType.ADULT)
+                    .memberType(MemberType.ADULT)
                     .registerDateTime(LocalDateTime.now().minusDays(1))
                     .password("password")
                     .gender(Gender.MALE)

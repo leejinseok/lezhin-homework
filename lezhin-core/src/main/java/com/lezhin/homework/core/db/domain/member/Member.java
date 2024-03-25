@@ -43,7 +43,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private MemberType type;
+    private MemberType memberType;
 
     @CreatedDate
     @Column(updatable = false)
@@ -70,7 +70,7 @@ public class Member {
                 .userEmail(userEmail)
                 .password(password)
                 .gender(gender)
-                .type(type)
+                .memberType(type)
                 .registerDateTime(registerDateTime)
                 .build();
     }

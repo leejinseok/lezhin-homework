@@ -90,7 +90,7 @@ class AuthControllerTest {
                 .userEmail(AES256Util.encrypt(request.getUserEmail()))
                 .password(passwordEncoder.encode(request.getPassword()))
                 .registerDateTime(LocalDateTime.now())
-                .type(MemberType.NORMAL)
+                .memberType(MemberType.NORMAL)
                 .gender(Gender.MALE)
                 .build();
 
@@ -114,7 +114,7 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.member.userName").value(member.getUserName()))
                 .andExpect(jsonPath("$.member.userEmail").value(AES256Util.decrypt(member.getUserEmail())))
                 .andExpect(jsonPath("$.member.gender").value(member.getGender().name()))
-                .andExpect(jsonPath("$.member.type").value(member.getType().name()))
+                .andExpect(jsonPath("$.member.type").value(member.getMemberType().name()))
                 .andExpect(jsonPath("$.token.accessToken").value(accessToken))
                 .andExpect(jsonPath("$.token.refreshToken").value(refreshToken));
     }

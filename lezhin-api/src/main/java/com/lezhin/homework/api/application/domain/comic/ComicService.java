@@ -45,7 +45,7 @@ public class ComicService {
         Comic comic = Comic.builder()
                 .contentsName(request.getContentsName())
                 .coin(request.getCoin())
-                .type(request.getType())
+                .comicType(request.getType())
                 .author(author)
                 .openDate(request.getOpenDate())
                 .likes(request.getLikes())
