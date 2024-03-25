@@ -83,6 +83,31 @@ swagger를 적용하여 api를 보기 좋게 만들었다.
 
 ## 성능 테스트 (locust)
 
+### 좋아요가 가장 많은 작품 3개 성능 테스트 
+
+run: load-test/docker-compose.yml 빌드
+
+url: /api/v1/comics/top-three-by-likes
+
+**No Cache**
+
+![](report/no-cache.png)
+
+
+| RPS  | Average Response Time | Failures |
+|------|-----------------------|----------|
+| 2090 | 79ms                  | 0        |
+
+
+**With Cache**
+
+![](report/with-cache.png)
+
+| RPS  | Average Response Time | Failures |
+|------|-----------------------|----------|
+| 3556 | 30ms                  | 0        |
+
+
 ## Swagger 
 
 주소: http://localhost:8080/swagger-ui/index.html
@@ -145,8 +170,9 @@ build파일 삭제
   - [ ] 작가 등록 api test
   - [x] 작가 등록 service 
   - [ ] 작가 등록 service test
-- [ ] 기타
+- [x] 기타
     - [x] swagger 정리
     - [x] 평가 작성 > 댓글 특수문자 방지
     - [x] 유료 변경시 100~500원 사이로만 가능하게
-    - [ ] README 작성
+    - [x] README 작성
+    - [x] 성능테스트
